@@ -20,10 +20,10 @@ public class CalcFactory {
         double lPrincipal = Double.parseDouble(homePrice);
         double dPayment = Double.parseDouble(downPayment);
         switch (type){
-            case "Purchase":
+            case "1":
                 calc = new MortgageCalculator(CalcType.PURCHASE, lPrincipal, dPayment, t, lRate);
                 break;
-            case "Refinance":
+            case "2":
                 calc = new RefinanceCalculator();
                 break;
             default:
