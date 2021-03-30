@@ -3,7 +3,6 @@ package com.javaccinations.utilties;
 import com.javaccinations.Calculator.*;
 import java.time.LocalDate;
 
-
 public class Prompter {
     public static Calculator mortgageCalculatorPrompts(){
         System.out.println("Please enter Home Price: ");
@@ -20,8 +19,6 @@ public class Prompter {
         String rate = UserInput.getUserInput();
 
         Calculator calc = CalcFactory.createCalculator("Purchase", homePrice, downPayment, loanTerm, rate);
-        calc.calculate();
-        calc.display();
         return CalcFactory.createCalculator("Purchase", homePrice, downPayment, loanTerm, rate);
     }
 
@@ -39,7 +36,7 @@ public class Prompter {
 
     }
 
-    public static Calculator refinanceCalculatorPrompts(){
+    public static Calculator[] refinanceCalculatorPrompts(){
         System.out.println("Please enter your original mortgage amount: ");
         String origMortgageAmount = UserInput.getUserInput();
 
@@ -47,40 +44,33 @@ public class Prompter {
         termPrompt();
         String origTerm = UserInput.getUserInput();
 
-
         System.out.println("Please enter your original Mortgage Interest Rate: ");
         String origRate = UserInput.getUserInput();
 
         System.out.println("Please enter your initial origination year: ");
         String origYear = UserInput.getUserInput();
-        int effectiveLoanTerm = LocalDate.now().getYear() -Integer.parseInt(origYear);  //number of yrs the borrower has been paying mortgage
+        int [] paidLoanTerm = {LocalDate.now().getYear() -Integer.parseInt(origYear)};  //number of yrs the borrower has been paying mortgage
 
-        Calculator calc = CalcFactory.createCalculator("Refinance", origMortgageAmount, "0", origTerm, origRate);
-        double currMonthlyPayment = calc.calculate();
-        double balance = RefinanceCalculator.calculateRemainingBalance(origMortgageAmount,effectiveLoanTerm,origRate,currMonthlyPayment);
+        Calculator calc = CalcFactory.createCalculator("Refinance", origMortgageAmount, "0", String.valueOf(origTerm), origRate,paidLoanTerm);
+        calc.calculate();// needs to initialize the monthlyPayment
 
+        //Handling New Mortgage Details
 
-        //pass the balance and the new term, rate for "REFINANCE"
         System.out.println("Please enter your new mortgage term: ");
         termPrompt();
         String newTerm = UserInput.getUserInput();
 
         System.out.println("Please enter your new Mortgage Interest Rate: ");
         String newRate = UserInput.getUserInput();
-        Calculator calc2 = CalcFactory.createCalculator("Refinance", String.valueOf(balance), "0", newTerm, newRate);
-        double newMonthlyPayment =calc2.calculate();
 
-        System.out.println("Your new monthly payment = " + AmortizationScheduler.roundMe2Decimals(newMonthlyPayment));
-        if(newMonthlyPayment<currMonthlyPayment)
-            System.out.println("Your monthly savings is $" + AmortizationScheduler.roundMe2Decimals(currMonthlyPayment - newMonthlyPayment));
-        else{
-            System.out.println("You'll pay $" + AmortizationScheduler.roundMe2Decimals(newMonthlyPayment - currMonthlyPayment)+ " more per month");
-        }
+        Calculator calc2 = CalcFactory.createCalculator("Refinance", String.valueOf(((RefinanceCalculator) calc).getBalance()), "0", newTerm, newRate,paidLoanTerm);
+        calc2.calculate();//needs to initialize the monthlyPayment
 
-        return calc2 ;
+        Calculator [] calculators ={calc,calc2};
+
+        return calculators;
 
     }
-
 
     public static void calcPrompt(){
         System.out.println(

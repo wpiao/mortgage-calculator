@@ -7,7 +7,7 @@ public class CalcFactory {
     public CalcFactory() {
     }
 
-    public static Calculator createCalculator(String type, String homePrice, String downPayment, String loanTerm, String rate) {
+    public static Calculator createCalculator(String type, String homePrice, String downPayment, String loanTerm, String rate,int... paidLoanTerm) {
         Calculator calc = null;
         int lTerm = 0;
         for (LoanTerm lt : LoanTerm.values()){
@@ -24,7 +24,7 @@ public class CalcFactory {
                 calc = new MortgageCalculator(lPrincipal, dPayment, lTerm, lRate);
                 break;
             case "Refinance":
-                calc = new RefinanceCalculator(lPrincipal,lTerm,lRate);
+                calc = new RefinanceCalculator(lPrincipal,lTerm,lRate,paidLoanTerm);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid type: "
