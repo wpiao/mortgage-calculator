@@ -9,10 +9,10 @@ public class CalcFactory {
 
     public static Calculator createCalculator(String type, String homePrice, String downPayment, String loanTerm, String rate) {
         Calculator calc = null;
-        int t = 0;
+        int lTerm = 0;
         for (LoanTerm lt : LoanTerm.values()){
             if(lt.getLoanTerm().equals(loanTerm)){
-                t = Integer.parseInt(lt.getLoanTerm());
+                lTerm = Integer.parseInt(lt.getLoanTerm());
             }
         }
 
@@ -21,10 +21,10 @@ public class CalcFactory {
         double dPayment = Double.parseDouble(downPayment);
         switch (type){
             case "Purchase":
-                calc = new MortgageCalculator(CalcType.PURCHASE, lPrincipal, dPayment, t, lRate);
+                calc = new MortgageCalculator(lPrincipal, dPayment, lTerm, lRate);
                 break;
             case "Refinance":
-                calc = new RefinanceCalculator();
+                calc = new RefinanceCalculator(lPrincipal,lTerm,lRate);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid type: "

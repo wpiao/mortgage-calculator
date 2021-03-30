@@ -1,8 +1,7 @@
 package com.javaccinations.client;
 
-import com.javaccinations.Calculator.CalcFactory;
 import com.javaccinations.Calculator.Calculator;
-import com.javaccinations.Calculator.LoanTerm;
+import com.javaccinations.utilties.Prompter;
 import com.javaccinations.utilties.UserInput;
 
 public class CalculatorClient {
@@ -16,37 +15,25 @@ public class CalculatorClient {
 
     public static void start(){
         System.out.println("Please select a Calculator: ");
-        calcPrompt();
+        Prompter.calcPrompt();
         String type = UserInput.getUserInput();
 
-        System.out.println("Please enter Home Price: ");
-        String homePrice = UserInput.getUserInput();
+        switch (type){
+            case "1" : Prompter.mortgageCalculatorPrompts();
+                        break;
+            case "2" : calc=Prompter.refinanceCalculatorPrompts();
+                        //calc.
+                        break;
+            case "3" : Prompter.amortizationPrompts();
+                        break;
+            case "4" : System.exit(0);
+            default:
+                System.out.println("Invalid Entry!! Please select one of the entries below :");
+                start();
 
-        System.out.println("Please enter Down Payment: ");
-        String downPayment = UserInput.getUserInput();
+        }
 
-        System.out.println("Please enter a Loan Term: ");
-        termPrompt();
-        String loanTerm = UserInput.getUserInput();
-
-        System.out.println("Please enter a Loan Interest Rate: ");
-        String rate = UserInput.getUserInput();
-
-        calc = CalcFactory.createCalculator(type, homePrice, downPayment, loanTerm, rate);
-        calc.calculate();
     }
 
-    public static void calcPrompt(){
-        System.out.println(
-                "   Enter 1 for Purchase\n" +
-                "   Enter 2 for Refinance\n" +
-                "   Enter 3 to Exit\n");
-    }
 
-    public static void termPrompt(){
-        System.out.println(
-                "   Year - " + LoanTerm.FIFTEEN_YEAR.getLoanTerm() + "\n" +
-                        "   Year - " + LoanTerm.THIRTY_YEAR.getLoanTerm() + "\n" +
-                        "   Exit\n");
-    }
 }

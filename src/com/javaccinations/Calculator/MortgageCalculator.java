@@ -1,13 +1,12 @@
 package com.javaccinations.Calculator;
 
 public class MortgageCalculator implements Calculator{
-    CalcType type;
+
     int loanTerm;
     double homePrice, downPayment, rate;
 
 
-    public MortgageCalculator(CalcType type, double homePrice, double downPayment, int loanTerm, double rate) {
-        this.type = type;
+    public MortgageCalculator(double homePrice, double downPayment, int loanTerm, double rate) {
         this.homePrice = homePrice;
         this.downPayment = downPayment;
         this.loanTerm = loanTerm;
@@ -16,22 +15,16 @@ public class MortgageCalculator implements Calculator{
 
     @Override
     public void display() {
-
+        System.out.println("Your monthly payment = " + AmortizationScheduler.roundMe2Decimals(calculate()));
     }
 
     @Override
     public double calculate() {
-        System.out.println("Mortgage Calculator Prints");
         double monthlyRate = (rate/100)/12;
         int months = loanTerm*12;
         double principal = homePrice - downPayment;
-        double result = Math.round((principal * monthlyRate)/(1 - Math.pow(1 + monthlyRate, - months)));
-        System.out.println(result);
+        double result = (principal * monthlyRate)/(1 - Math.pow(1 + monthlyRate, - months));
         return result;
-    }
-
-    public void setType(CalcType type) {
-        this.type = type;
     }
 
     public void setLoanTerm(int loanTerm) {
