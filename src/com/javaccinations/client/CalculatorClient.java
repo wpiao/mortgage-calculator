@@ -21,7 +21,7 @@ public class CalculatorClient {
         String type = UserInput.getUserInput();
 
         switch (type){
-            case "1" : Prompter.mortgageCalculatorPrompts();
+            case "1" :  calc=Prompter.mortgageCalculatorPrompts();
                         calc.calculate();
                         calc.display();
                         break;
