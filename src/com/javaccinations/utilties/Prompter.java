@@ -1,75 +1,59 @@
 package com.javaccinations.utilties;
 
-import com.javaccinations.Calculator.*;
-import java.time.LocalDate;
+import com.javaccinations.calculator.*;
 
 public class Prompter {
-    public static Calculator mortgageCalculatorPrompts(){
+    public static void mortgageCalculatorPrompts(Mortgage mortgage){
+
         System.out.println("Please enter Home Price: ");
-        String homePrice = UserInput.getUserInput();
+        mortgage.setHomePrice(UserInput.getUserInputDouble());
 
         System.out.println("Please enter Down Payment: ");
-        String downPayment = UserInput.getUserInput();
+        mortgage.setDownPayment(UserInput.getUserInputDouble());
 
-        System.out.println("Please enter a Loan Term: ");
+        System.out.println("Please enter the Loan Term: ");
         termPrompt();
-        String loanTerm = UserInput.getUserInput();
+        mortgage.setLoanTerm(UserInput.getUserInputInteger());
 
-        System.out.println("Please enter a Loan Interest Rate: ");
-        String rate = UserInput.getUserInput();
+        System.out.println("Please enter the Loan Interest Rate: ");
+        mortgage.setRate(UserInput.getUserInputDouble());
 
-        Calculator calc = CalcFactory.createCalculator("Purchase", homePrice, downPayment, loanTerm, rate);
-        return CalcFactory.createCalculator("Purchase", homePrice, downPayment, loanTerm, rate);
     }
 
-    public static void amortizationPrompts(){
+    public static void amortizationPrompts(Mortgage mortgage){
+
         System.out.println("Please enter your mortgage amount: ");
-        String mortgageAmount = UserInput.getUserInput();
+        mortgage.setPrincipal(UserInput.getUserInputDouble());
 
         System.out.println("Please enter your mortgage term: ");
         termPrompt();
-        String loanTerm = UserInput.getUserInput();
+        mortgage.setLoanTerm(UserInput.getUserInputInteger());
 
         System.out.println("Please enter your Mortgage Interest Rate: ");
-        String rate = UserInput.getUserInput();
-        AmortizationScheduler.amortizationScheduler(mortgageAmount, loanTerm, rate);
-
+        mortgage.setRate(UserInput.getUserInputDouble());
     }
 
-    public static Calculator[] refinanceCalculatorPrompts(){
+    public static void refinanceCalculatorPrompts (Mortgage mortgage) {
+
         System.out.println("Please enter your original mortgage amount: ");
-        String origMortgageAmount = UserInput.getUserInput();
+        mortgage.setPrincipal(UserInput.getUserInputDouble());
 
         System.out.println("Please enter your original mortgage term: ");
         termPrompt();
-        String origTerm = UserInput.getUserInput();
+        mortgage.setLoanTerm(UserInput.getUserInputInteger());
 
         System.out.println("Please enter your original Mortgage Interest Rate: ");
-        String origRate = UserInput.getUserInput();
+        mortgage.setRate(UserInput.getUserInputDouble());
 
         System.out.println("Please enter your initial origination year: ");
-        String origYear = UserInput.getUserInput();
-        int [] paidLoanTerm = {LocalDate.now().getYear() -Integer.parseInt(origYear)};  //number of yrs the borrower has been paying mortgage
-
-        Calculator calc = CalcFactory.createCalculator("Refinance", origMortgageAmount, "0", String.valueOf(origTerm), origRate,paidLoanTerm);
-        calc.calculate();// needs to initialize the monthlyPayment
-
-        //Handling New Mortgage Details
+        mortgage.setOriginationYear(UserInput.getUserInputInteger());
 
         System.out.println("Please enter your new mortgage term: ");
         termPrompt();
-        String newTerm = UserInput.getUserInput();
+        mortgage.setNewLoanTerm(UserInput.getUserInputInteger());
 
         System.out.println("Please enter your new Mortgage Interest Rate: ");
-        String newRate = UserInput.getUserInput();
-
-        Calculator calc2 = CalcFactory.createCalculator("Refinance", String.valueOf(((RefinanceCalculator) calc).getBalance()), "0", newTerm, newRate,paidLoanTerm);
-        calc2.calculate();//needs to initialize the monthlyPayment
-
-        Calculator [] calculators ={calc,calc2};
-
-        return calculators;
-
+        mortgage.setNewRate(UserInput.getUserInputDouble());
     }
 
     public static void calcPrompt(){
@@ -86,8 +70,4 @@ public class Prompter {
                         "   Year - " + LoanTerm.THIRTY_YEAR.getLoanTerm() + "\n" +
                         "   Exit\n");
     }
-
-
-
-
 }

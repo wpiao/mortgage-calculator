@@ -1,37 +1,43 @@
 package com.javaccinations.client;
 
-import com.javaccinations.Calculator.Calculator;
-import com.javaccinations.Calculator.RefinanceCalculator;
+import com.javaccinations.calculator.CalcFactory;
+import com.javaccinations.calculator.Calculator;
+import com.javaccinations.calculator.Mortgage;
 import com.javaccinations.utilties.Prompter;
 import com.javaccinations.utilties.UserInput;
 
 public class CalculatorClient {
-    static Calculator calc,calc2;
-    static Calculator [] calcs;
+    static Calculator calc;
 
     public static void main(String[] args) {
-        System.out.println("Please enter your name to start the application:\n> ");
-        System.out.println("Hello " + UserInput.getUserInput());
+        System.out.println("Please enter your name to start the application:");
+        System.out.print("> ");
+        System.out.println("Hello " + UserInput.getUserInputString());
         start();
     }
 
     public static void start(){
         System.out.println("Please select a Calculator: ");
         Prompter.calcPrompt();
-        String type = UserInput.getUserInput();
+        String type = UserInput.getUserInputString();
+        Mortgage mortgage = new Mortgage();
 
         switch (type){
-            case "1" :  calc=Prompter.mortgageCalculatorPrompts();
-                        calc.calculate();
-                        calc.display();
+            case "1" :
+                        calc=CalcFactory.createCalculator("Purchase");
+                        Prompter.mortgageCalculatorPrompts(mortgage);
+                        calc.display(mortgage);
                         break;
-            case "2" : calcs=Prompter.refinanceCalculatorPrompts();
-                       calc=calcs[0];
-                       calc2=calcs[1];
-                       RefinanceCalculator.summarizeResults((RefinanceCalculator) calc,(RefinanceCalculator) calc2);
+            case "2" :
+                       calc = CalcFactory.createCalculator("Refinance");
+                       Prompter.refinanceCalculatorPrompts(mortgage);
+                       calc.display(mortgage);
                        break;
-            case "3" : Prompter.amortizationPrompts();
-                        break;
+            case "3" :
+                       calc = CalcFactory.createCalculator("Amortization");
+                       Prompter.amortizationPrompts(mortgage);
+                       calc.display(mortgage);
+                       break;
             case "4" : System.exit(0);
             default:
                 System.out.println("Invalid Entry!! Please select one of the entries below :");

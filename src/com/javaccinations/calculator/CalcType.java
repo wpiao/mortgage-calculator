@@ -1,8 +1,9 @@
-package com.javaccinations.Calculator;
+package com.javaccinations.calculator;
 
 public enum CalcType {
     PURCHASE  ("purchase"),
-    REFINANCE ("refinance");
+    REFINANCE ("refinance"),
+    AMORTIZATION ("amortization");
 
     private String calcType;
 
