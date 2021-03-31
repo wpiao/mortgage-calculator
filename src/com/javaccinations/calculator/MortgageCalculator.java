@@ -6,7 +6,7 @@ public class MortgageCalculator implements Calculator{
 
     @Override
     public void display(Mortgage mortgage) {
-        System.out.println("Your monthly payment = " + roundMe2Decimals(calculate(mortgage)));
+        System.out.println("Your monthly payment = $" + roundMe2Decimals(calculate(mortgage)));
     }
 
     @Override
