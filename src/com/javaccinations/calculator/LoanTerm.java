@@ -1,4 +1,4 @@
-package com.javaccinations.Calculator;
+package com.javaccinations.calculator;
 
 public enum LoanTerm {
     FIFTEEN_YEAR ("15"),

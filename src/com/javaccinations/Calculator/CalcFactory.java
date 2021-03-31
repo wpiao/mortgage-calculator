@@ -1,30 +1,21 @@
-package com.javaccinations.Calculator;
-
-import com.javaccinations.client.CalculatorClient;
+package com.javaccinations.calculator;
 
 public class CalcFactory {
 
-    public CalcFactory() {
+    private CalcFactory() {
     }
 
-    public static Calculator createCalculator(String type, String homePrice, String downPayment, String loanTerm, String rate) {
+    public static Calculator createCalculator(String type){
         Calculator calc = null;
-        int t = 0;
-        for (LoanTerm lt : LoanTerm.values()){
-            if(lt.getLoanTerm().equals(loanTerm)){
-                t = Integer.parseInt(lt.getLoanTerm());
-            }
-        }
-
-        double lRate = Double.parseDouble(rate);
-        double lPrincipal = Double.parseDouble(homePrice);
-        double dPayment = Double.parseDouble(downPayment);
         switch (type){
-            case "1":
-                calc = new MortgageCalculator(CalcType.PURCHASE, lPrincipal, dPayment, t, lRate);
+            case "Purchase":
+                calc = new MortgageCalculator();
                 break;
-            case "2":
+            case "Refinance":
                 calc = new RefinanceCalculator();
+                break;
+            case "Amortization":
+                calc = new AmortizationCalculator();
                 break;
             default:
                 throw new IllegalArgumentException("Invalid type: "
