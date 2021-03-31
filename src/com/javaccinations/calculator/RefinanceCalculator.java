@@ -5,7 +5,10 @@ import static com.javaccinations.utilties.Rounding.roundMe2Decimals;
 
 public class RefinanceCalculator implements Calculator{
    static double oldMonthlyPayment, newMonthlyPayment;
-   static double oldTotalInterest=0, newTotalInterest=0;
+   static double oldTotalInterest, newTotalInterest;
+   static final String ANSI_RESET = "\u001B[0m";
+   static final String ANSI_RED = "\u001B[31m";
+   static final String ANSI_GREEN = "\u001B[32m";
 
     @Override
     public void display(Mortgage mortgage) {
@@ -31,7 +34,7 @@ public class RefinanceCalculator implements Calculator{
         caculateTotalInterests(mortgage);
     }
 
-    public double calculate(Mortgage mortgage) {
+        public double calculate(Mortgage mortgage) { // should not be called directly
         double monthlyRate = (mortgage.getNewRate()/100)/12;
         int months = mortgage.getNewLoanTerm() *12;
         newMonthlyPayment = (mortgage.getPrincipal() * monthlyRate)/(1 - Math.pow(1 + monthlyRate, - months));
@@ -40,7 +43,8 @@ public class RefinanceCalculator implements Calculator{
     }
 
      public void caculateTotalInterests(Mortgage mortgage){
-         int unPaidLoanTerm = mortgage.getLoanTerm() - LocalDate.now().getYear();
+
+         int unPaidLoanTerm = mortgage.getLoanTerm() - (LocalDate.now().getYear()-mortgage.getOriginationYear());
          double balance = mortgage.getPrincipal();
 
          for (int i=1;i<=(unPaidLoanTerm*12);i++) {
@@ -56,21 +60,27 @@ public class RefinanceCalculator implements Calculator{
              double principalPayment = newMonthlyPayment - monthlyInterest;
              balance = balance - principalPayment;   // balance left to be paid
          }
+         System.out.println("Current Loan Balance = $" + roundMe2Decimals(mortgage.getPrincipal()));
          summarizeResults();
      }
 
     public static void summarizeResults() {
-        System.out.println("New monthly payment = " + roundMe2Decimals(newMonthlyPayment));
-        System.out.println("Old monthly payment = " + roundMe2Decimals(oldMonthlyPayment));
-        if (newMonthlyPayment < oldMonthlyPayment)
-            System.out.println("Your monthly savings is $" + roundMe2Decimals(oldMonthlyPayment - newMonthlyPayment));
-        else {
-            System.out.println("You'll pay $" + roundMe2Decimals(newMonthlyPayment - oldMonthlyPayment) + " more per month");
-        }
 
+        System.out.println("New monthly payment = $" + roundMe2Decimals(newMonthlyPayment));
+        System.out.println("Old monthly payment = $" + roundMe2Decimals(oldMonthlyPayment));
+        double monthlySavings = roundMe2Decimals(oldMonthlyPayment - newMonthlyPayment);
+        System.out.println("Monthly Savings = $ " + monthlySavings);
+
+        if (newMonthlyPayment < oldMonthlyPayment)
+            System.out.println(ANSI_GREEN + "Your monthly savings is $" + monthlySavings + ANSI_RESET);
+        else {
+            System.out.println(ANSI_RED + "You'll pay $" + (-1*monthlySavings) + " more per month." + ANSI_RESET);
+        }
         if (newTotalInterest<oldTotalInterest)
-            System.out.println("However, if you refinance you’ll pay $" +roundMe2Decimals(oldTotalInterest-newTotalInterest) + "less on your mortgage interest.");
+            System.out.println(ANSI_GREEN + "However, if you refinance you’ll pay $" +roundMe2Decimals(oldTotalInterest-newTotalInterest)
+                    + " less on your mortgage interest." + ANSI_RESET);
         else
-            System.out.println("if you refinance you’ll pay $" +roundMe2Decimals(newTotalInterest-oldTotalInterest) + "less on your mortgage interest.");
+            System.out.println(ANSI_RED + "If you refinance you’ll pay $" +roundMe2Decimals(newTotalInterest-oldTotalInterest)
+                    + " more on your mortgage interest." + ANSI_RESET);
     }
 }
