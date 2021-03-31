@@ -10,16 +10,18 @@ public class CalculatorClient {
     static Calculator calc;
 
     public static void main(String[] args) {
-        System.out.println("Please enter your name to start the application:");
-        System.out.print("> ");
-        System.out.println("Hello " + UserInput.getUserInputString());
+        System.out.println("\n********* Welcome to the Mortgage Calculator ********** \n");
+        System.out.print("Please enter your name to start the application: \n> ");
+        System.out.println("\nHello " + UserInput.getUserInputString() + "!!\n");
         start();
     }
 
     public static void start(){
         System.out.println("Please select a Calculator: ");
         Prompter.calcPrompt();
+        System.out.print("> ");
         String type = UserInput.getUserInputString();
+        System.out.println();
         Mortgage mortgage = new Mortgage();
 
         switch (type){
