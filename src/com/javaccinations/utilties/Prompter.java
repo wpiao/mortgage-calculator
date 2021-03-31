@@ -17,46 +17,18 @@ public class Prompter {
 
         System.out.println("Please enter Down Payment: ");
         String downPayment = UserInput.getUserInputString();
-        try {
-            while(!numberOrNot(downPayment) || Double.parseDouble(downPayment) < 0.0 || Double.parseDouble(downPayment) > dHomePrice) {
-                System.out.println("Please enter a valid down payment. Down payment has be be less than the home price.\n");
-                System.out.println("Please enter Down Payment: ");
-                downPayment = UserInput.getUserInputString();
-            }
-        } catch (IllegalUserInputException e) {
-            e.getMessage();
-        }
-        double dDownPayment = Double.parseDouble(downPayment);
+        double dDownPayment = downPaymentValidation(downPayment, dHomePrice);
         mortgage.setDownPayment(dDownPayment);
 
         System.out.println("Please enter the Loan Term: ");
         termPrompt();
         String loanTerm = UserInput.getUserInputString();
-        List<String> allowedLoanTerm = Arrays.asList("15", "30");
-        try {
-            while (!allowedLoanTerm.contains(loanTerm)) {
-                System.out.println("You entered invalid input. Please enter 15 or 30.\n");
-                System.out.println("Please enter a Loan Term: ");
-                loanTerm = UserInput.getUserInputString();
-            }
-        } catch (IllegalUserInputException e) {
-            e.getMessage();
-        }
-        int iLoanTerm = Integer.parseInt(loanTerm);
+        int iLoanTerm = loanTermValidation(loanTerm);
         mortgage.setLoanTerm(iLoanTerm);
 
         System.out.println("Please enter the Loan Interest Rate: ");
         String rate = UserInput.getUserInputString();
-        try {
-            while (!numberOrNot(rate) || Double.parseDouble(rate) <= 0.0) {
-                System.out.println("You entered invalid input. Please enter a positive loan interest rate.\n");
-                System.out.println("Please enter a Loan Interest Rate: ");
-                rate = UserInput.getUserInputString();
-            }
-        } catch (IllegalUserInputException e) {
-            e.getMessage();
-        }
-        double dRate = Double.parseDouble(rate);
+        double dRate = rateValidation(rate);
         mortgage.setRate(dRate);
 
     }
@@ -130,10 +102,6 @@ public class Prompter {
                 calc.display(mortgage);
                 break;
             case "4" : System.exit(0);
-            // default:
-            //     System.out.println("Invalid Entry!! Please select one of the entries below :");
-            //     start();
-
         }
     }
 
@@ -179,5 +147,45 @@ public class Prompter {
             e.getMessage();
         }
         return Double.parseDouble(homePrice);
+    }
+
+    private static double downPaymentValidation(String downPayment, double dHomePrice) {
+        try {
+            while(!numberOrNot(downPayment) || Double.parseDouble(downPayment) < 0.0 || Double.parseDouble(downPayment) > dHomePrice) {
+                System.out.println("Please enter a valid down payment. Down payment has be be less than the home price.\n");
+                System.out.println("Please enter Down Payment: ");
+                downPayment = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        return Double.parseDouble(downPayment);
+    }
+
+    private static int loanTermValidation(String loanTerm) {
+        List<String> allowedLoanTerm = Arrays.asList("15", "30");
+        try {
+            while (!allowedLoanTerm.contains(loanTerm)) {
+                System.out.println("You entered invalid input. Please enter 15 or 30.\n");
+                System.out.println("Please enter a Loan Term: ");
+                loanTerm = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        return Integer.parseInt(loanTerm);
+    }
+
+    private static double rateValidation(String rate) {
+        try {
+            while (!numberOrNot(rate) || Double.parseDouble(rate) <= 0.0) {
+                System.out.println("You entered invalid input. Please enter a positive loan interest rate.\n");
+                System.out.println("Please enter a Loan Interest Rate: ");
+                rate = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        return Double.parseDouble(rate);
     }
 }
