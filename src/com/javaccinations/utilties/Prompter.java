@@ -2,21 +2,62 @@ package com.javaccinations.utilties;
 
 import com.javaccinations.calculator.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Prompter {
+    static Calculator calc;
+
     public static void mortgageCalculatorPrompts(Mortgage mortgage){
 
         System.out.println("Please enter Home Price: ");
-        mortgage.setHomePrice(UserInput.getUserInputDouble());
+        String homePrice = UserInput.getUserInputString();
+        double dHomePrice = homePriceValidation(homePrice);
+        mortgage.setHomePrice(dHomePrice);
 
         System.out.println("Please enter Down Payment: ");
-        mortgage.setDownPayment(UserInput.getUserInputDouble());
+        String downPayment = UserInput.getUserInputString();
+        try {
+            while(!numberOrNot(downPayment) || Double.parseDouble(downPayment) < 0.0 || Double.parseDouble(downPayment) > dHomePrice) {
+                System.out.println("Please enter a valid down payment. Down payment has be be less than the home price.\n");
+                System.out.println("Please enter Down Payment: ");
+                downPayment = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        double dDownPayment = Double.parseDouble(downPayment);
+        mortgage.setDownPayment(dDownPayment);
 
         System.out.println("Please enter the Loan Term: ");
         termPrompt();
-        mortgage.setLoanTerm(UserInput.getUserInputInteger());
+        String loanTerm = UserInput.getUserInputString();
+        List<String> allowedLoanTerm = Arrays.asList("15", "30");
+        try {
+            while (!allowedLoanTerm.contains(loanTerm)) {
+                System.out.println("You entered invalid input. Please enter 15 or 30.\n");
+                System.out.println("Please enter a Loan Term: ");
+                loanTerm = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        int iLoanTerm = Integer.parseInt(loanTerm);
+        mortgage.setLoanTerm(iLoanTerm);
 
         System.out.println("Please enter the Loan Interest Rate: ");
-        mortgage.setRate(UserInput.getUserInputDouble());
+        String rate = UserInput.getUserInputString();
+        try {
+            while (!numberOrNot(rate) || Double.parseDouble(rate) <= 0.0) {
+                System.out.println("You entered invalid input. Please enter a positive loan interest rate.\n");
+                System.out.println("Please enter a Loan Interest Rate: ");
+                rate = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        double dRate = Double.parseDouble(rate);
+        mortgage.setRate(dRate);
 
     }
 
@@ -56,6 +97,46 @@ public class Prompter {
         mortgage.setNewRate(UserInput.getUserInputDouble());
     }
 
+    public static void typePrompt() {
+        System.out.println("Please select a Calculator: ");
+        calcPrompt();
+        String type = UserInput.getUserInputString();
+        try {
+            List<String> allowedType = Arrays.asList("1", "2", "3", "4");
+            while (!allowedType.contains(type)) {
+                System.out.println("You entered invalid input: " + type + ". Please 1 or 2 or 3 or 4 to select the mortgage type.");
+                calcPrompt();
+                type = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        Mortgage mortgage = new Mortgage();
+
+        switch (type){
+            case "1" :
+                calc= CalcFactory.createCalculator("Purchase");
+                Prompter.mortgageCalculatorPrompts(mortgage);
+                calc.display(mortgage);
+                break;
+            case "2" :
+                calc = CalcFactory.createCalculator("Refinance");
+                Prompter.refinanceCalculatorPrompts(mortgage);
+                calc.display(mortgage);
+                break;
+            case "3" :
+                calc = CalcFactory.createCalculator("Amortization");
+                Prompter.amortizationPrompts(mortgage);
+                calc.display(mortgage);
+                break;
+            case "4" : System.exit(0);
+            // default:
+            //     System.out.println("Invalid Entry!! Please select one of the entries below :");
+            //     start();
+
+        }
+    }
+
     public static void calcPrompt(){
         System.out.println(
                 "   Enter 1 for Purchase\n" +
@@ -69,5 +150,34 @@ public class Prompter {
                 "   Year - " + LoanTerm.FIFTEEN_YEAR.getLoanTerm() + "\n" +
                         "   Year - " + LoanTerm.THIRTY_YEAR.getLoanTerm() + "\n" +
                         "   Exit\n");
+    }
+
+    public static void namePrompt() {
+        System.out.println("Please enter your name to start the application:");
+        System.out.print("> ");
+        System.out.println("Hello " + UserInput.getUserInputString());
+    }
+
+    private static boolean numberOrNot(String input) {
+        boolean result = true;
+        try {
+            Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            result = false;
+        }
+        return result;
+    }
+
+    private static double homePriceValidation(String homePrice) {
+        try {
+            while(!numberOrNot(homePrice) || Double.parseDouble(homePrice) <= 0) {
+                System.out.println("You entered invalid input. Please enter a positive number for the home price.\n");
+                System.out.println("Please enter Home Price: ");
+                homePrice = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        return Double.parseDouble(homePrice);
     }
 }
