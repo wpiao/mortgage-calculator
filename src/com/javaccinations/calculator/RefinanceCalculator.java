@@ -6,22 +6,42 @@ import static com.javaccinations.utilties.Rounding.roundMe2Decimals;
 public class RefinanceCalculator implements Calculator {
     double oldMonthlyPayment, newMonthlyPayment;
     double oldTotalInterest, newTotalInterest;
-    int oldLoanTerm;
-    double oldRate;
     final String ANSI_RESET = "\u001B[0m";
     final String ANSI_RED = "\u001B[31m";
     final String ANSI_GREEN = "\u001B[32m";
 
     @Override
     public void display(Mortgage mortgage) {
-        oldMonthlyPayment = calculate(mortgage);
-        oldRate = mortgage.getRate();                  //used by CalculateTotalInterests
-        oldLoanTerm = mortgage.getLoanTerm();         //used by CalculateTotalInterests
-        setNewMortgage(mortgage);
-        newMonthlyPayment = calculate(mortgage);
         calculateTotalInterests(mortgage);
         System.out.println("Current Loan Balance = $" + roundMe2Decimals(mortgage.getPrincipal()));
         summarizeResults();
+    }
+    public void calculateTotalInterests(Mortgage mortgage) {
+        oldMonthlyPayment = calculate(mortgage);
+        double oldRate = mortgage.getRate();
+        int oldLoanTerm = mortgage.getLoanTerm();
+        setNewMortgage(mortgage);
+        newMonthlyPayment = calculate(mortgage);
+
+        //calculate total interest on the old loan(from current date to end of loan term)
+        int unPaidLoanTerm = oldLoanTerm - (LocalDate.now().getYear() - mortgage.getOriginationYear());
+        double balance = mortgage.getPrincipal();
+
+        for (int i = 1; i <= (unPaidLoanTerm * 12); i++) {
+            double monthlyInterest = (balance * oldRate / 12) / 100;
+            oldTotalInterest = oldTotalInterest + monthlyInterest;
+            double principalPayment = oldMonthlyPayment - monthlyInterest;
+            balance = balance - principalPayment;
+        }
+
+        //calculate total interest on the new loan for the whole loan term
+        balance = mortgage.getPrincipal();
+        for (int i = 1; i <= (mortgage.getNewLoanTerm() * 12); i++) {
+            double monthlyInterest = (balance * mortgage.getNewRate() / 12) / 100;
+            newTotalInterest = newTotalInterest + monthlyInterest;
+            double principalPayment = newMonthlyPayment - monthlyInterest;
+            balance = balance - principalPayment;
+        }
     }
 
     public void setNewMortgage(Mortgage mortgage) {
@@ -45,29 +65,6 @@ public class RefinanceCalculator implements Calculator {
         double result = (mortgage.getPrincipal() * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months));
 
         return result;
-    }
-
-    public void calculateTotalInterests(Mortgage mortgage) {
-
-        //calculate total interest on the old loan(from current date to end of loan term)
-        int unPaidLoanTerm = oldLoanTerm - (LocalDate.now().getYear() - mortgage.getOriginationYear());
-        double balance = mortgage.getPrincipal();
-
-        for (int i = 1; i <= (unPaidLoanTerm * 12); i++) {
-            double monthlyInterest = (balance * oldRate / 12) / 100;
-            oldTotalInterest = oldTotalInterest + monthlyInterest;
-            double principalPayment = oldMonthlyPayment - monthlyInterest;
-            balance = balance - principalPayment;
-        }
-
-        //calculate total interest on the new loan for the whole loan term
-        balance = mortgage.getPrincipal();
-        for (int i = 1; i <= (mortgage.getNewLoanTerm() * 12); i++) {
-            double monthlyInterest = (balance * mortgage.getNewRate() / 12) / 100;
-            newTotalInterest = newTotalInterest + monthlyInterest;
-            double principalPayment = newMonthlyPayment - monthlyInterest;
-            balance = balance - principalPayment;
-        }
     }
 
     public void summarizeResults() {
