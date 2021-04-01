@@ -9,6 +9,56 @@ import java.util.List;
 public class Prompter {
     static Calculator calc;
 
+    public static void namePrompt() {
+        System.out.println("\n********* Welcome to the Mortgage Calculator ********** \n");
+        System.out.print("Please enter your name to start the application: \n> ");
+        System.out.println("\nHello " + UserInput.getUserInputString() + "!!\n");
+    }
+
+    public static void typePrompt() {
+        System.out.println("Please select a Calculator: ");
+        calcPrompt();
+        String type = UserInput.getUserInputString();
+        try {
+            List<String> allowedType = Arrays.asList("1", "2", "3", "4");
+            while (!allowedType.contains(type)) {
+                System.out.println("You entered invalid input: " + type + ". Please 1 or 2 or 3 or 4 to select the mortgage type.");
+                calcPrompt();
+                type = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        Mortgage mortgage = new Mortgage();
+
+        switch (type){
+            case "1" :
+                calc= CalcFactory.createCalculator("Purchase");
+                Prompter.mortgageCalculatorPrompts(mortgage);
+                calc.display(mortgage);
+                break;
+            case "2" :
+                calc = CalcFactory.createCalculator("Refinance");
+                Prompter.refinanceCalculatorPrompts(mortgage);
+                calc.display(mortgage);
+                break;
+            case "3" :
+                calc = CalcFactory.createCalculator("Amortization");
+                Prompter.amortizationPrompts(mortgage);
+                calc.display(mortgage);
+                break;
+            case "4" : System.exit(0);
+        }
+    }
+
+    public static void calcPrompt(){
+        System.out.println(
+                "   Enter 1 for Purchase\n" +
+                        "   Enter 2 for Refinance\n" +
+                        "   Enter 3 for Amortization Schedule\n" +
+                        "   Enter 4 to Exit");
+    }
+
     public static void mortgageCalculatorPrompts(Mortgage mortgage){
 
         System.out.print("Please enter Home Price: \n> ");
@@ -90,63 +140,11 @@ public class Prompter {
         double dNewRate = rateValidation(newRate);
         mortgage.setNewRate(dNewRate);
     }
-
-    public static void typePrompt() {
-        System.out.println("Please select a Calculator: ");
-        calcPrompt();
-        System.out.print("> ");
-        String type = UserInput.getUserInputString();
-        try {
-            List<String> allowedType = Arrays.asList("1", "2", "3", "4");
-            while (!allowedType.contains(type)) {
-                System.out.println("You entered invalid input: " + type + ". Please enter 1 or 2 or 3 to select the calculate type. Enter 4 to exit.");
-                calcPrompt();
-                System.out.print("> ");
-                type = UserInput.getUserInputString();
-            }
-        } catch (IllegalUserInputException e) {
-            e.getMessage();
-        }
-        Mortgage mortgage = new Mortgage();
-
-        switch (type){
-            case "1" :
-                calc= CalcFactory.createCalculator("Purchase");
-                Prompter.mortgageCalculatorPrompts(mortgage);
-                calc.display(mortgage);
-                break;
-            case "2" :
-                calc = CalcFactory.createCalculator("Refinance");
-                Prompter.refinanceCalculatorPrompts(mortgage);
-                calc.display(mortgage);
-                break;
-            case "3" :
-                calc = CalcFactory.createCalculator("Amortization");
-                Prompter.amortizationPrompts(mortgage);
-                calc.display(mortgage);
-                break;
-            case "4" : System.exit(0);
-        }
-    }
-
-    public static void calcPrompt(){
-        System.out.println(
-                "   Enter 1 for Purchase\n" +
-                "   Enter 2 for Refinance\n" +
-                "   Enter 3 for Amortization Schedule\n" +
-                "   Enter 4 to Exit");
-    }
-
+   
     public static void termPrompt(){
         System.out.println(
                 "   Year - " + LoanTerm.FIFTEEN_YEAR.getLoanTerm() + "\n" +
                         "   Year - " + LoanTerm.THIRTY_YEAR.getLoanTerm());
-    }
-
-    public static void namePrompt() {
-        System.out.println("\n********* Welcome to the Mortgage Calculator ********** \n");
-        System.out.print("Please enter your name to start the application: \n> ");
-        System.out.println("\nHello " + UserInput.getUserInputString() + "!!\n");
     }
 
     private static boolean numberOrNot(String input) {

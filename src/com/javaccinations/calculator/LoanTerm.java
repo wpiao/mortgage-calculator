@@ -1,8 +1,8 @@
 package com.javaccinations.calculator;
 
 public enum LoanTerm {
-    FIFTEEN_YEAR ("15"),
-    THIRTY_YEAR ("30");
+    FIFTEEN_YEAR("15"),
+    THIRTY_YEAR("30");
 
     String loanTerm;
 
@@ -10,7 +10,7 @@ public enum LoanTerm {
         loanTerm = term;
     }
 
-    public String getLoanTerm(){
+    public String getLoanTerm() {
         return loanTerm;
     }
 }
