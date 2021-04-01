@@ -2,6 +2,7 @@ package com.javaccinations.utilties;
 
 import com.javaccinations.calculator.*;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,24 +61,24 @@ public class Prompter {
 
     public static void mortgageCalculatorPrompts(Mortgage mortgage){
 
-        System.out.println("Please enter Home Price: \n> ");
+        System.out.print("Please enter Home Price: \n> ");
         String homePrice = UserInput.getUserInputString();
         double dHomePrice = homePriceValidation(homePrice);
         mortgage.setHomePrice(dHomePrice);
 
-        System.out.println("Please enter Down Payment: \n>");
+        System.out.print("Please enter Down Payment: \n> ");
         String downPayment = UserInput.getUserInputString();
         double dDownPayment = downPaymentValidation(downPayment, dHomePrice);
         mortgage.setDownPayment(dDownPayment);
 
         System.out.println("Please enter the Loan Term: ");
         termPrompt();
+        System.out.print("> ");
         String loanTerm = UserInput.getUserInputString();
         int iLoanTerm = loanTermValidation(loanTerm);
-        System.out.print("> ");
         mortgage.setLoanTerm(iLoanTerm);
 
-        System.out.println("Please enter the Loan Interest Rate: \n>");
+        System.out.print("Please enter the Loan Interest Rate: \n> ");
         String rate = UserInput.getUserInputString();
         double dRate = rateValidation(rate);
         mortgage.setRate(dRate);
@@ -86,42 +87,60 @@ public class Prompter {
     public static void amortizationPrompts(Mortgage mortgage){
 
         System.out.print("Please enter your mortgage amount: \n> ");
-        mortgage.setPrincipal(UserInput.getUserInputDouble());
+        String mortgageAmount = UserInput.getUserInputString();
+        double dMortgageAmount = mortgageAmountValidation(mortgageAmount);
+        mortgage.setPrincipal(dMortgageAmount);
 
         System.out.println("Please enter your mortgage term: ");
         termPrompt();
         System.out.print("> ");
-        mortgage.setLoanTerm(UserInput.getUserInputInteger());
+        String loanTerm = UserInput.getUserInputString();
+        int iLoanTerm = loanTermValidation(loanTerm);
+        mortgage.setLoanTerm(iLoanTerm);
 
         System.out.print("Please enter your Mortgage Interest Rate: \n> ");
-        mortgage.setRate(UserInput.getUserInputDouble());
+        String rate = UserInput.getUserInputString();
+        double dRate = rateValidation(rate);
+        mortgage.setRate(dRate);
     }
 
     public static void refinanceCalculatorPrompts (Mortgage mortgage) {
 
         System.out.print("Please enter your original mortgage amount: \n> ");
-        mortgage.setPrincipal(UserInput.getUserInputDouble());
+        String mortgageAmount = UserInput.getUserInputString();
+        double dMortgageAmount = mortgageAmountValidation(mortgageAmount);
+        mortgage.setPrincipal(dMortgageAmount);
 
         System.out.println("Please enter your original mortgage term: ");
         termPrompt();
         System.out.print("> ");
-        mortgage.setLoanTerm(UserInput.getUserInputInteger());
+        String originalLoanTerm = UserInput.getUserInputString();
+        int iOriginalLoanTerm = loanTermValidation(originalLoanTerm);
+        mortgage.setLoanTerm(iOriginalLoanTerm);
 
         System.out.print("Please enter your original Mortgage Interest Rate: \n> ");
-        mortgage.setRate(UserInput.getUserInputDouble());
+        String originalRate = UserInput.getUserInputString();
+        double dOriginalRate = rateValidation(originalRate);
+        mortgage.setRate(dOriginalRate);
 
         System.out.print("Please enter your initial origination year: \n> ");
-        mortgage.setOriginationYear(UserInput.getUserInputInteger());
+        String year = UserInput.getUserInputString();
+        int iYear = yearValidation(year);
+        mortgage.setOriginationYear(iYear);
 
         System.out.println("Please enter your new mortgage term: ");
         termPrompt();
         System.out.print("> ");
-        mortgage.setNewLoanTerm(UserInput.getUserInputInteger());
+        String newLoanTerm = UserInput.getUserInputString();
+        int iNewLoanTerm = loanTermValidation(newLoanTerm);
+        mortgage.setNewLoanTerm(iNewLoanTerm);
 
         System.out.print("Please enter your new Mortgage Interest Rate: \n> ");
-        mortgage.setNewRate(UserInput.getUserInputDouble());
+        String newRate = UserInput.getUserInputString();
+        double dNewRate = rateValidation(newRate);
+        mortgage.setNewRate(dNewRate);
     }
-
+   
     public static void termPrompt(){
         System.out.println(
                 "   Year - " + LoanTerm.FIFTEEN_YEAR.getLoanTerm() + "\n" +
@@ -141,8 +160,8 @@ public class Prompter {
     private static double homePriceValidation(String homePrice) {
         try {
             while(!numberOrNot(homePrice) || Double.parseDouble(homePrice) <= 0) {
-                System.out.println("You entered invalid input. Please enter a positive number for the home price.\n");
-                System.out.println("Please enter Home Price: ");
+                System.out.println("\nYou entered invalid input. Please enter a positive number for the home price.");
+                System.out.print("Please enter Home Price: \n> ");
                 homePrice = UserInput.getUserInputString();
             }
         } catch (IllegalUserInputException e) {
@@ -151,11 +170,24 @@ public class Prompter {
         return Double.parseDouble(homePrice);
     }
 
+    private static double mortgageAmountValidation(String mortgageAmount) {
+        try {
+            while(!numberOrNot(mortgageAmount) || Double.parseDouble(mortgageAmount) <= 0) {
+                System.out.println("\nYou entered invalid input. Please enter a positive number for mortgage amount.");
+                System.out.print("Please enter Mortgage Amount: \n> ");
+                mortgageAmount = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        return Double.parseDouble(mortgageAmount);
+    }
+
     private static double downPaymentValidation(String downPayment, double dHomePrice) {
         try {
             while(!numberOrNot(downPayment) || Double.parseDouble(downPayment) < 0.0 || Double.parseDouble(downPayment) > dHomePrice) {
-                System.out.println("Please enter a valid down payment. Down payment has be be less than the home price.\n");
-                System.out.println("Please enter Down Payment: ");
+                System.out.println("\nPlease enter a valid down payment. Down payment has be be less than the home price.");
+                System.out.print("Please enter Down Payment: \n> ");
                 downPayment = UserInput.getUserInputString();
             }
         } catch (IllegalUserInputException e) {
@@ -168,8 +200,10 @@ public class Prompter {
         List<String> allowedLoanTerm = Arrays.asList("15", "30");
         try {
             while (!allowedLoanTerm.contains(loanTerm)) {
-                System.out.println("You entered invalid input. Please enter 15 or 30.\n");
+                System.out.println("\nYou entered invalid input. Please enter 15 or 30.");
                 System.out.println("Please enter a Loan Term: ");
+                termPrompt();
+                System.out.print("> ");
                 loanTerm = UserInput.getUserInputString();
             }
         } catch (IllegalUserInputException e) {
@@ -181,13 +215,26 @@ public class Prompter {
     private static double rateValidation(String rate) {
         try {
             while (!numberOrNot(rate) || Double.parseDouble(rate) <= 0.0) {
-                System.out.println("You entered invalid input. Please enter a positive loan interest rate.\n");
-                System.out.println("Please enter a Loan Interest Rate: ");
+                System.out.println("\nYou entered invalid input. Please enter a positive loan interest rate.");
+                System.out.print("Please enter a Loan Interest Rate: \n> ");
                 rate = UserInput.getUserInputString();
             }
         } catch (IllegalUserInputException e) {
             e.getMessage();
         }
         return Double.parseDouble(rate);
+    }
+
+    private static int yearValidation(String year) {
+        try {
+            while(!numberOrNot(year) || Integer.parseInt(year) < 0 || Integer.parseInt(year) > LocalDate.now().getYear()) {
+                System.out.println("\nYou entered invalid input. The input year has to be earlier than current year.");
+                System.out.print("Please enter your initial origination year: \n> ");
+                year = UserInput.getUserInputString();
+            }
+        } catch (IllegalUserInputException e) {
+            e.getMessage();
+        }
+        return Integer.parseInt(year);
     }
 }
