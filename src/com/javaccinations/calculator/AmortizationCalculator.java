@@ -7,7 +7,6 @@ public class AmortizationCalculator implements Calculator {
 
     @Override
     public void display(Mortgage mortgage) {
-
         System.out.printf("%14s %10s %11s %10s %16s %10s %n", "Payment Date", "Payment", "Principal", "Interest", "Total Interest", "Balance");
         System.out.printf("%14s %10s %11s %10s %16s %10s %n", "------------", "-------", "---------", "--------", "--------------", "-------");
 
@@ -32,7 +31,6 @@ public class AmortizationCalculator implements Calculator {
                     roundMe2Decimals(totalInterest),
                     "", roundMe2Decimals(balance));
         }
-
     }
 
     @Override

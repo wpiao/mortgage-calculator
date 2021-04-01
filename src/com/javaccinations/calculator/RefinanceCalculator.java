@@ -1,7 +1,6 @@
 package com.javaccinations.calculator;
 
 import java.time.LocalDate;
-
 import static com.javaccinations.utilties.Rounding.roundMe2Decimals;
 
 public class RefinanceCalculator implements Calculator {
@@ -16,6 +15,8 @@ public class RefinanceCalculator implements Calculator {
     @Override
     public void display(Mortgage mortgage) {
         oldMonthlyPayment = calculate(mortgage);
+        oldRate = mortgage.getRate();                  //used by CalculateTotalInterests
+        oldLoanTerm = mortgage.getLoanTerm();         //used by CalculateTotalInterests
         setNewMortgage(mortgage);
         newMonthlyPayment = calculate(mortgage);
         calculateTotalInterests(mortgage);
@@ -34,9 +35,7 @@ public class RefinanceCalculator implements Calculator {
         }
 
         mortgage.setPrincipal(balance);
-        oldRate = mortgage.getRate();                 //used by CalculateTotalInterests
         mortgage.setRate(mortgage.getNewRate());
-        oldLoanTerm = mortgage.getLoanTerm();         //used by CalculateTotalInterests
         mortgage.setLoanTerm(mortgage.getNewLoanTerm());
     }
 
