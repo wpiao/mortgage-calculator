@@ -15,7 +15,6 @@ public class Mortgage {
         setDownPayment(downPayment);
         setLoanTerm(loanTerm);
         setRate(rate);
-
     }
 
     public Mortgage(double principal, int loanTerm, double rate, int newLoanTerm, double newRate, int originationYear) {
