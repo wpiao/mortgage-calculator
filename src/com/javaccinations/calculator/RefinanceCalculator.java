@@ -18,7 +18,7 @@ public class RefinanceCalculator implements Calculator {
         oldMonthlyPayment = calculate(mortgage);
         setNewMortgage(mortgage);
         newMonthlyPayment = calculate(mortgage);
-        caculateTotalInterests(mortgage);
+        calculateTotalInterests(mortgage);
         System.out.println("Current Loan Balance = $" + roundMe2Decimals(mortgage.getPrincipal()));
         summarizeResults();
     }
@@ -48,7 +48,7 @@ public class RefinanceCalculator implements Calculator {
         return result;
     }
 
-    public void caculateTotalInterests(Mortgage mortgage) {
+    public void calculateTotalInterests(Mortgage mortgage) {
 
         //calculate total interest on the old loan(from current date to end of loan term)
         int unPaidLoanTerm = oldLoanTerm - (LocalDate.now().getYear() - mortgage.getOriginationYear());

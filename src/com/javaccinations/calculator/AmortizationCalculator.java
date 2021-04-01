@@ -1,7 +1,6 @@
 package com.javaccinations.calculator;
 
 import java.time.LocalDate;
-
 import static com.javaccinations.utilties.Rounding.roundMe2Decimals;
 
 public class AmortizationCalculator implements Calculator {
