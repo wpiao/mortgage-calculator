@@ -5,9 +5,9 @@ public class CalcFactory {
     private CalcFactory() {
     }
 
-    public static Calculator createCalculator(String type){
+    public static Calculator createCalculator(String type) {
         Calculator calc = null;
-        switch (type){
+        switch (type) {
             case "Purchase":
                 calc = new MortgageCalculator();
                 break;

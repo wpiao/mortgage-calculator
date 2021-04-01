@@ -4,13 +4,29 @@ public class Mortgage {
     private double homePrice;
     private double downPayment;
     private double principal;
-    private double balance;
     private double rate, newRate;
-    private double monthlyPayment;
-    private double monthlyInterest;
-    private double totalInterest;
     private int loanTerm, newLoanTerm, originationYear;
 
+    //CONSTRUCTORS
+    public Mortgage(){};
+
+    public Mortgage(double homePrice, double downPayment,int loanTerm, double rate) {
+        setHomePrice(homePrice);
+        setDownPayment(downPayment);
+        setLoanTerm(loanTerm);
+        setRate(rate);
+    }
+
+    public Mortgage(double principal, int loanTerm, double rate, int newLoanTerm, double newRate, int originationYear) {
+        setPrincipal(principal);
+        setLoanTerm(loanTerm);
+        setRate(rate);
+        setNewLoanTerm(newLoanTerm);
+        setNewRate(newRate);
+        setOriginationYear(originationYear);
+    }
+
+    //ACCESSOR METHODS
     public double getHomePrice() {
         return homePrice;
     }
@@ -49,38 +65,6 @@ public class Mortgage {
 
     public void setNewRate(double newRate) {
         this.newRate = newRate;
-    }
-
-    public double getMonthlyPayment() {
-        return monthlyPayment;
-    }
-
-    public void setMonthlyPayment(double monthlyPayment) {
-        this.monthlyPayment = monthlyPayment;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public double getMonthlyInterest() {
-        return monthlyInterest;
-    }
-
-    public void setMonthlyInterest(double monthlyInterest) {
-        this.monthlyInterest = monthlyInterest;
-    }
-
-    public double getTotalInterest() {
-        return totalInterest;
-    }
-
-    public void setTotalInterest(double totalInterest) {
-        this.totalInterest = totalInterest;
     }
 
     public int getLoanTerm() {
