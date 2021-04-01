@@ -3,7 +3,7 @@ package com.javaccinations.utilties;
 import com.javaccinations.calculator.*;
 
 public class Prompter {
-    public static void mortgageCalculatorPrompts(Mortgage mortgage){
+    public static void mortgageCalculatorPrompts(Mortgage mortgage) {
 
         System.out.print("Please enter Home Price: \n> ");
         mortgage.setHomePrice(UserInput.getUserInputDouble());
@@ -21,7 +21,7 @@ public class Prompter {
 
     }
 
-    public static void amortizationPrompts(Mortgage mortgage){
+    public static void amortizationPrompts(Mortgage mortgage) {
 
         System.out.print("Please enter your mortgage amount: \n> ");
         mortgage.setPrincipal(UserInput.getUserInputDouble());
@@ -35,7 +35,7 @@ public class Prompter {
         mortgage.setRate(UserInput.getUserInputDouble());
     }
 
-    public static void refinanceCalculatorPrompts (Mortgage mortgage) {
+    public static void refinanceCalculatorPrompts(Mortgage mortgage) {
 
         System.out.print("Please enter your original mortgage amount: \n> ");
         mortgage.setPrincipal(UserInput.getUserInputDouble());
@@ -60,15 +60,15 @@ public class Prompter {
         mortgage.setNewRate(UserInput.getUserInputDouble());
     }
 
-    public static void calcPrompt(){
+    public static void calcPrompt() {
         System.out.println(
                 "   Enter 1 for Purchase\n" +
-                "   Enter 2 for Refinance\n" +
-                "   Enter 3 for Amortization Schedule\n" +
-                "   Enter 4 to Exit");
+                        "   Enter 2 for Refinance\n" +
+                        "   Enter 3 for Amortization Schedule\n" +
+                        "   Enter 4 to Exit");
     }
 
-    public static void termPrompt(){
+    public static void termPrompt() {
         System.out.println(
                 "   Year - " + LoanTerm.FIFTEEN_YEAR.getLoanTerm() + "\n" +
                         "   Year - " + LoanTerm.THIRTY_YEAR.getLoanTerm());
