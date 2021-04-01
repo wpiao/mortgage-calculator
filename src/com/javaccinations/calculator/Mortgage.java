@@ -7,6 +7,15 @@ public class Mortgage {
     private double rate, newRate;
     private int loanTerm, newLoanTerm, originationYear;
 
+    public Mortgage(){};
+
+    public Mortgage(double homePrice, double downPayment,int loanTerm, double rate) {
+        setHomePrice(homePrice);
+        setDownPayment(downPayment);
+        setLoanTerm(loanTerm);
+        setRate(rate);
+    }
+
     public double getHomePrice() {
         return homePrice;
     }

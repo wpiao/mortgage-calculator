@@ -15,7 +15,7 @@ public class MortgageCalculator implements Calculator {
         int months = mortgage.getLoanTerm() * 12;
         double principal = mortgage.getHomePrice() - mortgage.getDownPayment();
         double result = (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -months));
-        return result;
+        return Math.round(result);
     }
 
 }
